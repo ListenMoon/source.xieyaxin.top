@@ -1,0 +1,20 @@
+{
+  "less.lint.unknownAtRules": "ignore",
+  "less.validate": false,
+  "scss.lint.unknownAtRules": "ignore",
+  "scss.validate": false,
+  "markdown-image.local.path": "/public/article", 
+  "markdown-image.local.referencePath": "/article/${mdname}/",
+  "markdown-image.base.fileNameFormat": "${mdname}/${YY}-${MM}-${DD}_${DD}-${HH}-${mm}-${ss}",
+  "markdown-image.base.urlEncode": false,
+  "templateGenerator.templatesPath": "${rootPath}/template",
+  // linux的edge位置
+  "browse-lite.chromeExecutable": "/usr/bin/microsoft-edge-dev",
+  // window的edge位置
+  // "browse-lite.chromeExecutable": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+  "browse-lite.startUrl": "http://localhost:3311",
+  "insertDateString.format": "YYYY/MM/DD hh:mm:ss",
+  "insertDateString.formatDate": "YYYY/MM/DD",
+  "insertDateString.formatTime": "hh:mm:ss",
+  "files.associations": { "*.mdx": "markdown" }
+}

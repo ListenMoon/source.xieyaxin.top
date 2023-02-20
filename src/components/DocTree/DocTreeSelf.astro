@@ -1,0 +1,55 @@
+---
+import {getEditURL, getNewURL, enableRemote, expandTreeType} from "@blog/config"
+import { betterDirectorySort } from "@blog/utils/better-directory-sort"
+export type One = {
+  name: string
+  path: string
+  active: string
+  filePath: string
+  data?: any
+  children: One[]
+}
+
+export interface Props {
+  list: One[]
+}
+
+const { list } = Astro.props as Props
+
+function isActive(url: string, isFolder?:boolean){
+  let pathArr = decodeURIComponent(Astro.url.pathname).slice(1).replace(/\/$/, '').split("/")
+  let urlArr = url.slice(1).split("/")
+  for (let i = 0; i < urlArr.length; i++) {
+    const one = urlArr[i];
+    if(one !== pathArr[i]) return false
+  }
+  return true
+//   return decodeURIComponent(Astro.url.pathname).replace(/\/$/, '').startsWith(url);
+}
+
+function haveFolderInChildren(v: One) {
+  if(v.data) return false
+  if(expandTreeType === "always") return true
+  if(expandTreeType === "dir") {
+    if(v.children.find(v=>!v.data)){
+        return true
+    } else {
+        return false
+    }
+  }
+}
+
+---
+
+{list.map(v=>{
+    const url = v.path
+    const vpath = !v.data?v.active:'' as any
+    return <details data-path={vpath || false} open={isActive(v.active, !v.data) || haveFolderInChildren(v)}>
+        <summary>
+            
+        {!v.data && <><span title={v.name} class:list={["tree-item", !!v.data && isActive(v.active)?'active':'']}>{v.name}</span>{enableRemote && <a target="_blank" href={getNewURL(url)} class="op">新建</a>}</>}
+        {!!v.data && <><a rel={isActive(v.active)?"":"prefetch"} href={v.data.url} title={v.name} class:list={["tree-item tree-md-file", !!v.data && isActive(v.active)?'active':'', v.name.endsWith(".mdx")?'mdx-file':'']}><div style="flex: 1;width: 0;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">{v.name}</div></a>{enableRemote && <a target="_blank" href={getEditURL(v.filePath)} class="op">编辑</a>}</>}
+      </summary>
+      {Array.isArray(v.children) && <Astro.self list={v.children} />}
+    </details>
+  })}
